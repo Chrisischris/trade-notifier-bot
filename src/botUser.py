@@ -48,7 +48,7 @@ class BotUser():
       await stream_client.handle_message()
 
   def send_message(self, msg):
-    print(json.dumps(msg, indent=4))
+    print('RAW TDA Response:\n', json.dumps(msg, indent=4))
 
     for msg in msg['content']:
       msgType = msg['MESSAGE_TYPE']
@@ -61,16 +61,17 @@ class BotUser():
         if msgType == 'OrderEntryRequest':
           # Disabled this for now, needs more formatted info to be useful
           # msgToSend = orderEntryRequestFormatter(parsedDict)
-          return
+          break
         elif msgType == 'OrderFill':
           msgToSend = orderFillFormatter(parsedDict)
+        else:
           return
 
-        print(rawJsonMSG)
+        print('Parsed Response JSON:\n', rawJsonMSG)
         try:
           self._webhook.send(msgToSend, username='Trade Notifier')
-        except discord.errors.HTTPException:
-          print('Discord HTTPException')
+        except discord.errors.HTTPException as e:
+          print('Discord HTTPException: ', e, '\nMsg Attempt: ', msgToSend)
 
 def orderEntryRequestFormatter(msgDict: dict):
   msgDict = msgDict.get('OrderEntryRequestMessage').get('Order')
@@ -104,22 +105,35 @@ def orderFillFormatter(msgDict: dict):
 
   msg = '**'
 
-  msg += order.get('Security').get('Symbol')
+  sym = order.get('Security').get('Symbol')
+  optionTDAString = None
+  if '_' in sym:
+    symSplit = sym.split('_')
+    msg += symSplit[0] + ' '
+    msg += symSplit[1][0:2] + '/' + symSplit[1][2:4] + '/' + symSplit[1][4:6] + ' ' + symSplit[1][6:]
+    optionTDAString = '.' + symSplit[0] + symSplit[1][4:6] + symSplit[1][0:2] + symSplit[1][2:4] + symSplit[1][6:]
+  else:
+    msg += sym
+
+  msg += ' ' + order.get('Security').get('SecurityType')
   if order.get('Security').get('SymbolUnderlying'):
     msg += ' ' + order.get('Security').get('SymbolUnderlying')
 
   msg += ' Order Executed ** - '
 
-  msg += datetime.fromisoformat(execInfo.get('Timestamp')).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
+  if optionTDAString:
+    msg += '(' + optionTDAString + ') '
+
+  msg += datetime.fromisoformat(execInfo.get('Timestamp')).astimezone().strftime("%m/%d/%Y %H:%M:%S %Z")
 
   msg += '\n```diff\n'
 
   quantity = execInfo.get('Quantity')
   if order.get('OrderInstructions') == 'Buy':
-    msg += '+' + quantity + ' BOT ' + execInfo.get('ExecutionPrice')
+    msg += '+ BOT Spot - ' + execInfo.get('ExecutionPrice')
 
   if order.get('OrderInstructions') == 'Sell':
-    msg += '-' + quantity + ' SOLD' + execInfo.get('ExecutionPrice')
+    msg += '- SOLD Spot - ' + execInfo.get('ExecutionPrice')
 
   msg += '\n```'
 
