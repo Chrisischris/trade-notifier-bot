@@ -11,7 +11,7 @@
 4. Done! You can shut down the bot at anytime when you don't need it and to restart it repeat step #3
 
 ## How to Run From EXE (Generated Using Auto-Py-To-Exe)
-1. Extract TradeNotifierBot.zip and click main.exe, you can also right click this send to desktop to make a shortcut for it
+1. Download and Extract TradeNotifierBot.zip from the releases section and click main.exe, you can also right click this send to desktop to make a shortcut for it
 2. Done! You can shut down the bot at anytime when you don't need it and to restart it repeat step #1
 
 Note: Config is saved in userData folder. To change webhook url and TDA account ID delete the savedconfig file

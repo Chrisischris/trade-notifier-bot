@@ -141,3 +141,4 @@ cython_debug/
 /src/userData
 /src/resExamples
 /output
+/src/output
