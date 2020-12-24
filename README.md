@@ -8,7 +8,7 @@
 1. In Terminal Run: `pip3 install -r requirements.txt`
 2. In Terminal Run: `python main.py`
 3. Enter TDA Account ID and Webhook URL
-4. Done! You can shut down the bot at anytime when you don't need it and to restart it repeat step #3
+4. Done! You can shut down the bot at anytime when you don't need it and to restart it repeat step #2
 
 ## How to Run From EXE (Generated Using Auto-Py-To-Exe)
 1. Download and Extract TradeNotifierBot.zip from the releases section and click main.exe, you can also right click this send to desktop to make a shortcut for it
