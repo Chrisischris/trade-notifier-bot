@@ -6,6 +6,7 @@
 
 ## How To Run From Source
 1. In Terminal Run: `pip3 install -r requirements.txt`
+    * If you get an error about C++ Build Tools, follow the link and install Visual Studio Build Tools -> C++ Build Tools -> Then make sure C++ x64/x86 Build Tools and Windows 10 SDK are selected under the Optional Installs menu
 2. In Terminal Run: `python main.py`
 3. Enter TDA Account ID and Webhook URL
 4. Done! You can shut down the bot at anytime when you don't need it and to restart it repeat step #2
